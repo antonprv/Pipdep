@@ -16,10 +16,12 @@ What it does:
 - Manages and updates dependency trees.
 
 How to use it:
-  Default behavior with no command-line arguments:
+  
+
+ 	Default behavior with no command-line arguments:
 		gets project dependencies and writes them to
 		file called "pip_dependency_tree.txt"
-	
+  
 	Arguments:
 	  -h to display this message
 	
@@ -33,3 +35,6 @@ How to use it:
 	  	(defaults to the <requirements.txt> file name, but you can customise it)
 	  	(default output: <module_name>==<version>)
   		usage: -a <module_name> <requirements_file_name(optional)>
+    
+How to install it?
+Simply save it somewhere and add the alias to the filee in your .bash_aliases or .bash_rc

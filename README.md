@@ -38,3 +38,11 @@ How to use it:
     
 How to install it?
 Simply save it somewhere and add the alias to the filee in your .bash_aliases or .bash_rc
+I use it daily along these aliases:
+	`(to activate virtual environment)`
+alias psrc="source venv/bin/activate"
+
+	`(to manage python versions)`
+alias p3-7='~/.pyenv/versions/3.7.17/bin/python'
+alias p3-9='~/.pyenv/versions/3.9.18/bin/python'
+alias p3-12='~/.pyenv/versions/3.12.2/bin/python'

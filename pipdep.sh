@@ -1,11 +1,11 @@
 #!/bin/bash
 
 get_dependencies() {
-    dependencies=$(pip show $1 | grep Requires | cut -d ':' -f 2)
+    dependencies=$($(which pip) show $1 | grep Requires | cut -d ':' -f 2)
     for dependency in $dependencies; do
 	    dep_name=$(echo $dependency | cut -d ' ' -f 2)
-	    if pip show "$dep_name" &>/dev/null; then
-		    dep_version=$(pip show $dep_name | grep Version | cut -d ' ' -f 2)
+	    if $(which pip) show "$dep_name" &>/dev/null; then
+		    dep_version=$($(which pip) show $dep_name | grep Version | cut -d ' ' -f 2)
 		    echo "$dep_name==$dep_version" >> $2
 	    else
 		    echo ""$dep_name" is not installed. Skipping..."
@@ -15,24 +15,23 @@ get_dependencies() {
 
 # Easily generate requirements file
 if [ "$1" = "-r" ]; then
-	pipdeptree | grep -P '^\w+' > "$2"
+	$(which pipdeptree) | grep -P '^\w+' > "$2"
 elif [ "$1" = "-s" ]; then
-	pipdeptree
+	$(which pipdeptree)
 elif [ "$1" = "-a" ]; then
 	
-	if [ $# -ne 3 ]; then
+	if [ $# -ne 2 ]; then
 		echo "Usage: $2 <module_name> $3 <requirements_file_name(optional)>"
-    exit 1
+	exit 1
 	fi
 	module_name="$2"
-	
 	if [ -z "$3" ]; then
 		requirements_file="requirements.txt"
 	else
 		requirements_file="$3"
 	fi
 
-	module_version=$(pip show "$module_name" | grep Version | cut -d ' ' -f 2)
+	module_version=$($(which pip) show "$module_name" | grep Version | cut -d ' ' -f 2)
 	echo "$module_name"=="$module_version" >> "$requirements_file"
 	get_dependencies $module_name $requirements_file
 
@@ -65,17 +64,16 @@ else
 	fi
 
 # Check if pipdeptree is installed
-if ! command -v pipdeptree >/dev/null 2>&1; then
+if ! command -v $(which pipdeptree) >/dev/null 2>&1; then
   echo "pipdeptree is not installed. Installing..."
   # Install pipdeptree using pip
-  pip install pipdeptree >/dev/null 2>&1 || exit 1
+  $(which pip) install pipdeptree >/dev/null 2>&1 || exit 1
 fi
 
 # -p option specifies sitepackages directory. Output is saved to file.
-pipdeptree | tee | grep -vE "(^python|^(distutils|setuptools|wheel|pip|virtualenv|venv))" > "$output_file"
+$(which pipdeptree) | tee | grep -vE "(^python|^(distutils|setuptools|wheel|pip|virtualenv|venv))" > "$output_file"
 
 # Print confirmation message (optional)
 # You can comment out this line if you don't want any confirmation message
 echo "Dependency tree saved to: $output_file"
-
 fi
